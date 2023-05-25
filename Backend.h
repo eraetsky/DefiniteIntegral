@@ -11,132 +11,28 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+#include "exprtk.hpp"
 
-const double PI = 3.141592;
-using ul = unsigned long;
-
-
-std::function<double(double)> power_function(const std::string &s)
-{
-    double c;
-    ul index,p;
-    index = s.find("x^");
-    c = s.substr(0,index) != "" ? stod(s.substr(0,index)) : 1;
-    p = stoi(s.substr(index+2, s.length()));
-    return [c,p](double x){return c * pow(x,p);};
+std::function<double(double)> parse_function(const std::string& expr_str) { //функція синтаксичного аналізатора
+    return [expr_str](double x){
+        typedef exprtk::symbol_table<double> symbol_table_t;
+        typedef exprtk::expression<double>     expression_t;
+        typedef exprtk::parser<double>             parser_t;
+        symbol_table_t symbol_table;
+        expression_t   expression;
+        parser_t       parser;
+        symbol_table.add_variable("x",x);
+        expression.register_symbol_table(symbol_table);
+        parser.compile(expr_str,expression);
+        return expression.value();
+    };
 }
 
-std::function<double(double)> inverse_ratio_function(const std::string &s)
+double solve(const std::string &s, double l, double r, int method, int p) //функція що повертає результат користувачу
 {
-    double c;
-    ul index;
-    index = s.find("/x");
-    c = s.substr(0,index) != "" ? stod(s.substr(0,index)) : 1;
-    return [c](double x){return c / x;};
-}
-
-std::function<double(double)> exponential_function(const std::string &s)
-{
-    double c,base;
-    ul index, star;
-    index = s.find("^x");
-    star = s.find("*") != -1 ? s.find("*") : 0;
-    c = s.substr(0,star) != "" ? stod(s.substr(0,star)) : 1;
-    base = stod(s.substr(star+1, index));
-    return [c,base](double x){return c * pow(base,x);};
-}
-
-std::function<double(double)> sin_function(const std::string &s)
-{
-    double c;
-    ul index;
-    index = s.find("sin");
-    c = s.substr(0,index) != "" ? stod(s.substr(0,index)) : 1;
-    return [c](double x){return c * sin(x);};
-}
-
-std::function<double(double)> cos_function(const std::string &s)
-{
-    double c;
-    ul index;
-    index = s.find("cos");
-    c = s.substr(0,index) != "" ? stod(s.substr(0,index)) : 1;
-    return [c](double x){return c * cos(x);};
-}
-
-std::function<double(double)> tg_function(const std::string &s)
-{
-    double c;
-    ul index;
-    index = s.find("tg");
-    c = s.substr(0,index) != "" ? stod(s.substr(0,index)) : 1;
-    return [c](double x){return c * tan(x);};
-}
-
-std::function<double(double)> ctg_function(const std::string &s)
-{
-    double c;
-    ul index;
-    index = s.find("ctg");
-    c = s.substr(0,index) != "" ? stod(s.substr(0,index)) : 1;
-    return [c](double x){return c * tan(PI/2 - x);};
-}
-
-double solve(const std::string &s, double l, double r, int method, int p)
-{
-    if (s.find("x^") != -1)
-    {
-        Integral I(power_function(s), l, r);
-        if (!method){return I.rectangle_integral(p);}
-        return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
-    }
-    
-    else if (s.find("/x") != -1)
-    {
-        Integral I(inverse_ratio_function(s), l, r);
-        if (!method){return I.rectangle_integral(p);}
-        return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
-    }
-    
-    else if (s.find("^x") != -1)
-    {
-        Integral I(exponential_function(s), l, r);
-        if (!method){return I.rectangle_integral(p);}
-        return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
-    }
-    
-    else if (s.find("sin") != -1)
-    {
-        Integral I(sin_function(s), l, r);
-        if (!method){return I.rectangle_integral(p);}
-        return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
-    }
-
-    else if (s.find("cos") != -1)
-    {
-        Integral I(cos_function(s), l, r);
-        if (!method){return I.rectangle_integral(p);}
-        return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
-    }
-
-    else if (s.find("ctg") != -1)
-    {
-        Integral I(ctg_function(s), l, r);
-        if (!method){return I.rectangle_integral(p);}
-        return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
-    }
-
-    else if (s.find("tg") != -1)
-    {
-        Integral I(tg_function(s), l, r);
-        if (!method){return I.rectangle_integral(p);}
-        return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
-    }
-    else
-    {
-        std::cout << "Parsing error. Incorrect input.\n"; return 0;
-    }
-    return 0;
+    Integral I(parse_function(s),l,r);
+    if (!method){return I.rectangle_integral(p);}
+    return method == 1 ? I.trapezoidal_integral(p) : I.parabolic_integral(p);
 }
 
 #endif /* Backend_h */

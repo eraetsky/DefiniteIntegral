@@ -2,8 +2,6 @@
 //  Backend.h
 //  Definite_Integral
 //
-//  Created by Evgeniy Raetsky on 25.03.2023.
-//
 
 #ifndef Backend_h
 #define Backend_h
@@ -13,7 +11,7 @@
 #include <math.h>
 #include "exprtk.hpp"
 
-std::function<double(double)> parse_function(const std::string& expr_str) { //функція синтаксичного аналізатора
+std::function<double(double)> parse_function(const std::string& expr_str) { 
     return [expr_str](double x){
         typedef exprtk::symbol_table<double> symbol_table_t;
         typedef exprtk::expression<double>     expression_t;
@@ -28,7 +26,7 @@ std::function<double(double)> parse_function(const std::string& expr_str) { //ф
     };
 }
 
-double solve(const std::string &s, double l, double r, int method, int p) //функція що повертає результат користувачу
+double solve(const std::string &s, double l, double r, int method, int p) 
 {
     Integral I(parse_function(s),l,r);
     if (!method){return I.rectangle_integral(p);}

@@ -2,8 +2,7 @@
 //  Utils.h
 //  Definite_Integral
 //
-//  Created by Evgeniy Raetsky on 04.05.2023.
-//
+
 
 #ifndef Utils_h
 #define Utils_h
@@ -18,7 +17,7 @@ namespace utils
     Texts texts;
     std::string special_chars = "`[]{}&@!$%<>,|~;:";
 
-    std::tuple<double,double,bool> get_bounds(std::fstream& f) //функція що читає з файлу і повертає межі інтегрування
+    std::tuple<double,double,bool> get_bounds(std::fstream& f) 
     {
         std::string line, chl, chr;
         double l, r; bool badcast = false;
@@ -35,7 +34,7 @@ namespace utils
         return std::make_tuple(l, r, badcast);
     }
 
-    std::tuple<double,double,bool> get_bounds() //функція що читає з консолі і повертає межі інтегрування
+    std::tuple<double,double,bool> get_bounds() 
     {
         std::string chl,chr;
         double l, r; bool badcast = false;
@@ -56,7 +55,7 @@ namespace utils
         return std::make_tuple(l, r, badcast);
     }
 
-    bool contains(const std::string&forbidden, const std::string& s) //функція що перевіряє чи рядок користувача містить спеціальні символи
+    bool contains(const std::string&forbidden, const std::string& s) 
     {
         for (const char ch : s)
         {
@@ -68,7 +67,7 @@ namespace utils
     }
 
 
-    void get_input_console(std::string& function, char& ch, double& l, double& r, int& precision) //функція що отримує вхідні дані для обчислення інтеграла з консолі
+    void get_input_console(std::string& function, char& ch, double& l, double& r, int& precision)
     {
         bool flag; std::string n;
         std::cin.ignore();
@@ -108,7 +107,7 @@ namespace utils
     }
 
 
-    void get_input_file(std::string& function, char& ch, double& l, double& r, int& precision) //функція що отримує вхідні дані для обчислення інтеграла з файлу
+    void get_input_file(std::string& function, char& ch, double& l, double& r, int& precision) 
     {
         bool flag; std::string n;
         std::cin.ignore();
@@ -140,12 +139,12 @@ namespace utils
     }
 
     
-     void clear_console() //функція що очищує консоль
+     void clear_console() 
      {
          system("clear");
      }
      
-    void write_result_to_file(iConsole* ptr_result) //функція запису результатів до файлу
+    void write_result_to_file(iConsole* ptr_result) 
     {
         std::string filename, filepath, fullpath;
         std::cout << "Please enter a file name:\n";

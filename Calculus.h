@@ -2,8 +2,6 @@
 //  Calculus.h
 //  Definite_Integral
 //
-//  Created by Evgeniy Raetsky on 20.03.2023.
-//
 
 #ifndef Calculus_h
 #define Calculus_h
@@ -24,7 +22,7 @@ public:
     double parabolic_integral(int n);
 };
 
-double Integral::rectangle_integral(int n) //функція що обчислює визначений інтеграл методом прямокутників
+double Integral::rectangle_integral(int n) 
 {
     const double width = (this->right_bound - this->left_bound) / n;
     double res = 0;
@@ -33,7 +31,7 @@ double Integral::rectangle_integral(int n) //функція що обчислю�
     return res;
 }
 
-double Integral::trapezoidal_integral(int n) //функція що обчислює визначений інтеграл методом трапецій
+double Integral::trapezoidal_integral(int n) 
 {
     const double width = (this->right_bound - this->left_bound) / n;
     double res = 0, x1, x2;
@@ -46,7 +44,7 @@ double Integral::trapezoidal_integral(int n) //функція що обчисл�
     return res;
 }
 
-double Integral::parabolic_integral(int n) //функція що обчислює визначений інтеграл методом параболічних трапецій
+double Integral::parabolic_integral(int n) 
 {
     const double width = (this->right_bound - this->left_bound) / n;
     double res = 0, x1 = this->left_bound;
